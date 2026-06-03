@@ -89,6 +89,9 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "allowedHosts": ["host.docker.internal", "localhost"]
+          },
           "configurations": {
             "production": {
               "buildTarget": "Toolshop:build:production"
