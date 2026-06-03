@@ -25,10 +25,13 @@ services:
     working_dir: /app
     volumes:
       - ./${SPRINT}/UI:/app:cached
+      - ui_node_modules:/app/node_modules
+    environment:
+      - NODE_OPTIONS=--max-old-space-size=4096
     ports:
       - 4200:4200
     command: >
-      bash -c "npm install --force && ng serve --host 0.0.0.0 --port 4200"
+      bash -c "npm install --force && ng serve --host 0.0.0.0 --port 4200 --poll 2000"
 
   # The Web Server
   web:
@@ -47,6 +50,8 @@ services:
   composer:
     image: composer:2.6.6
     entrypoint: /bin/sh
+    environment:
+      - COMPOSER_PROCESS_TIMEOUT=1800
     command: -c "composer install --no-dev --optimize-autoloader --ignore-platform-req=ext-ffi && chown -R www-data /var/www && chmod 777 /var/www"
     volumes_from:
       - laravel-api
@@ -67,3 +72,4 @@ services:
 
 volumes:
   laravel-api:
+  ui_node_modules:
